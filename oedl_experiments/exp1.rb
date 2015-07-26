@@ -43,13 +43,13 @@ end
 
 onEvent(:ALL_UP_AND_INSTALLED) do |event|
   wait 10
-  info "Starting the Receiver"
+  info "Starting the Receiver" 
   group("receiver").startApplications
   info "Starting the Sender"
   group("sender").startApplications
   wait 8
   property.tx_module = "waveform"
-  property.rx_module = "timesamplestofile"
+  property.rx_module = "fftmovingavgoml"
   freqs = [*796..804]
   for i in 1..9
     n = freqs.sample;
@@ -57,7 +57,7 @@ onEvent(:ALL_UP_AND_INSTALLED) do |event|
     property.tx_freq = "#{n}e6"
     wait 1
   end
-  property.del_rx_module = "timesamplestofile"
+  property.del_rx_module = "fftmovingavgoml"
   group("sender").stopApplications
   group("receiver").stopApplications
   Experiment.done
