@@ -1,9 +1,8 @@
-# Spectrum Sensing
-Development repository for the [SDR in ORBIT: Spectrum Sensing](http://www.orbit-lab.org/wiki/Other/Summer/2015/aSDR2#SDRinORBIT:SpectrumSensing) project, part of the WINLAB Summer Internship 2015.
+# OEDL Experiments
 
-### OEDL Experiments
+These experiments are written in the OMF Experiment Description Language and are designed to be run on one of the ORBIT consoles (typically Sandbox 7 or Grid.)
 
-##### Experiment 1
+### Experiment 1
 
 In this experiment we modify the [Spectrum sensing with USRP2 and wiserd (OEDL and OML)](http://www.orbit-lab.org/wiki/Tutorials/k0SDR/Tutorial05#SpectrumsensingwithUSRP2andwiserdOEDLandOML) tutorial.
 
@@ -13,7 +12,7 @@ As our first experiment we modified the tutorial. We increase the sampling rate 
 
 Using OML, we save the receiver readings to a file for processing in MATLAB/Octave. Using a MATLAB script, we generate a waterfall plot of the data, along with an animated power vs. frequency plot.
 
-**Update: Raw IQ Samples and Processing in MATLAB**
+##### Update: Raw IQ Samples and Processing in MATLAB
 
 Next, using the same frequencies and sampling rate as the original tutorial, we modified the OEDL script in order to collect raw time domain samples using ORBIT as opposed to samples that had already been converted into the frequency domain.
 
