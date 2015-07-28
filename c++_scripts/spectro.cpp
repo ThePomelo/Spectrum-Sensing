@@ -115,6 +115,23 @@ while (stop(index, fft_size_ , overlap_) < N) {
     for (unsigned int i = 0; i < fft_half; i++){
     I->push_back(sqrt(pow(out_[i][0],2) + pow(out_[i][1],2)));
     }
+
+
+    vector<vector<double> > avg_ffts(fft_data_.size() - average_ffts_ + 1, vector<double> (fft_size_,0));
+
+    if (average_ffts_ > 1) {
+
+    	int i = 0;
+    	for(vector<double>& row: avg_ffts) {
+    		for(int j = 0; j < fft_size_; j++) {
+    			for (int k = i; k < i + average_ffts_; k++) {
+    				row.at(j) += fft_data_.at(k).at(j);
+    			}
+    		}
+    		i++;
+    	}
+    	
+    }
     /*for (int i = 0; i < fft_size_; i++) {
     	cout<<"fft_data_[" << i << "]: "<<fft_data_.at(i)<<endl;
     }*/
