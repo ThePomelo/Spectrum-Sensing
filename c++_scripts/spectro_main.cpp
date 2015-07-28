@@ -16,6 +16,10 @@
 #include <stdio.h>
 #include "spectro.h"
 
+//run with following flags: -lfftw3 -lm -lboost_iostreams -lboost_filesystem -lboost_system 
+
+
+
 using namespace std;
 
 /*long getFileSize(FILE *file) {
@@ -93,16 +97,16 @@ const char *filePath = "/media/sf_WINLAB/exp2.bin";
 
 int main () {
 
+Gnuplot gp;
+
 ifstream file ("exp2.bin", fstream::binary); //| fstream::ate);
 
-file.seekg(0, file.end);
-int length = file.tellg();
-cout<<length<<endl;
+//file.seekg(0, file.end);
+//int length = file.tellg();
+//cout<<length<<endl;
 file.seekg(0, file.beg);
 
-char* buffer = new char[length];
-
-file.read(buffer, length);
+char* buffer = new char[sizeof(float)];
 
 if (file) {
     cout<<"File opened successfully"<<endl;
@@ -111,29 +115,63 @@ else {
     cout<<"Error opening file"<<endl;
 
 }
-cout.write(buffer, length);
+
+float* floats;
+
+double reals;
+double imags;
+
+int i = 0;
+vector<complex<double> > y;
+while(i < 20*80000) {
+
+file.read(buffer, sizeof(float));
+floats = (float*)buffer;
+if (i % 2 == 0) {
+    reals = (*floats);
+    //cout<<reals<<" ";
+}
+
+else {
+    imags = (*floats);
+    //cout<<imags<<'\n';
+    y.push_back(complex<double>(reals,imags));
+    //cout<<"hello"<<endl;
+}
+i++;
+//if (i % 10000 == 0) {
+  //  cout<< i/2 <<endl;
+//}
+}
+
+
+
+
+//cout.write(buffer, sizeof(float));
 
 file.close();
+
+
 
 
 //Gnuplot gp; 
 float pi = acos(-1);
 
-vector<complex<double> > samples (10000,complex<double>(0,0));
-for (unsigned int i = 0; i < samples.size(); i++) {
+//vector<complex<double> > samples (10000,complex<double>(0,0));
+/*for (unsigned int i = 0; i < samples.size(); i++) {
 	float f = 50*sin(2*pi*i/10);
 	samples.at(i) = complex<double> (f,f);
-}
+}*/
 //samples[4] = complex<float>(300,300);
 //vector<complex<double> > samples (10,complex<double>(10,0));
 double c_freq = 800e6;
 double s_freq = 10e6;
-unsigned int fftsize = 1000;
+unsigned int fftsize = 40000;
 double overlap = 0;
-vector<complex<double> > window (1000,complex<double>(1,0));
-unsigned int av = 10;
+vector<complex<double> > window (40000,complex<double>(1,0));
+unsigned int av = 1;
 
-fft_avg ob(samples, c_freq, s_freq, fftsize, overlap, window, av);
+fft_avg ob(y, c_freq, s_freq, fftsize, overlap, window, av);
 ob.spectro();
 vector<vector<double> >* x = ob.get_fft_data();
 
@@ -143,23 +181,29 @@ vector<vector<double> >* x = ob.get_fft_data();
 	}
 	cout<<endl;
 } */
-//gp << "set terminal x11\n";
-/*
+gp << "set terminal x11\n";
+//gp << "set zero 1e-20\n";
+
 vector<pair<double,double> > xy_pts_A;
 for (auto I = x->begin(); I < x->end(); I++) {
 	for (int i = 0; i < I->size(); i++) {
 		//gp << i << " " << x->at(0).at(i) <<'\n';
-		xy_pts_A.push_back(make_pair(i,I->at(i)));
+		xy_pts_A.push_back(make_pair(i,20*log10((I->at(i))/1000.0)));
 }
-gp << "plot '-' with lines\n";
-gp.send1d(xy_pts_A);
+//gp << "plot '-' with lines\n";
+//gp << "clear\n";
+gp << "plot '-' binary" << gp.binFmt1d(xy_pts_A, "record") << "with lines notitle\n";
+//gp.send1d(xy_pts_A);
+gp.sendBinary1d(xy_pts_A);
 gp.flush();
-this_thread::sleep_for(chrono::milliseconds(100));
+this_thread::sleep_for(chrono::milliseconds(1000));
+
+xy_pts_A.clear();
 }
 //gp << " 1 3 \n";
 //gp << " 3 4 \n";
 //gp << "e\n";
-*/
+
 delete[] buffer;
 return 0;
 }
