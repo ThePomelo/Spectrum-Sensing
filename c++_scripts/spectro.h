@@ -6,7 +6,7 @@
 #include <vector>
 #include <complex>
 #include <fftw3.h>
-#include <gnuplot-iostream.h>
+#include "gnuplot-iostream.h"
 using namespace std;
 
 // iq_samples = row matrix (vector) of IQ samples
@@ -17,37 +17,40 @@ using namespace std;
 // window = row matrix (vector) of size k to be used as a window function
 // average_ffts = number of ffts to be averaged together
 
-class fft_avg {
- private:
+class Spectro {
+ protected:
   vector<complex<double> > iq_samples_;
   double carrier_freq_;
-  double sampling_freq_; 
+  double sampling_freq_;
   unsigned int fft_size_;
-  double overlap_; 
-  vector<complex<double> > window_; 
-  unsigned int average_ffts_;
+  //double overlap_;
+  vector<double> window_;
+  //unsigned int average_ffts_;
   fftw_complex *in_;
   fftw_complex *out_;
   fftw_plan plan_;
   //vector<complex<double> > mags_;
-  vector<vector<double> > fft_data_;
+  vector<double> fft_data_;
+  Gnuplot gp;
 public:
 // beginning of each FFT
-  unsigned int start(int index, unsigned int fft_size, double overlap);
+  //unsigned int start(int index, unsigned int fft_size, double overlap);
 // end of each FFT
-  unsigned int stop(int index, unsigned int fft_size, double overlap);
+  //unsigned int stop(int index, unsigned int fft_size, double overlap);
 
-  void spectro();
-  vector<vector<double> >* get_fft_data() {
-  	return &fft_data_;
+  void fft_generate();
+
+  void fft_plot();
+
+  vector<double>* get_fft_data() {
+    return &fft_data_;
   }
 
-  fft_avg() {}
-  fft_avg(vector<complex<double> > iq_samples, double carrier_freq, 
-  	     double sampling_freq, unsigned int fft_size, double overlap, 
-  	     vector<complex<double> > window, unsigned int average_ffts); 
+  Spectro();
+  Spectro(vector<complex<double> > iq_samples, double carrier_freq,
+         double sampling_freq, unsigned int fft_size,vector<double> window);
 
-  ~fft_avg();
+  ~Spectro();
 
 
 
