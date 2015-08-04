@@ -13,9 +13,9 @@ RealTimePlotting::RealTimePlotting(std::unordered_map<std::string, std::string> 
 
     carrier_freq_ = boost::lexical_cast<double>(radio_parameter_map_->at("uhd_rx_freq"));
     sampling_freq_ = boost::lexical_cast<double>(radio_parameter_map_->at("uhd_rx_rate"));
-    fft_size_ = sampling_freq_/25;
+    fft_size_ = 100000;
     //overlap_ = 0;
-    window_ = std::vector<double> (fft_size_,1);
+    window_ = std::vector<float> (fft_size_,1);
     all_set_ = true;
 }
 
@@ -53,7 +53,7 @@ void RealTimePlotting::Proc(std::vector<std::complex<float> > *recv_buffer) {
     if (all_set_) {
         auto I = recv_buffer->begin();
         std::cout<<"Sample buffer\n";
-	while (iq_samples_.size() < fft_size_ and I != recv_buffer->end()) {
+    while (iq_samples_.size() < fft_size_ and I != recv_buffer->end()) {
             iq_samples_.push_back(*I);
             ++I;
         }
@@ -63,3 +63,4 @@ void RealTimePlotting::Proc(std::vector<std::complex<float> > *recv_buffer) {
         }
     }
 }
+
