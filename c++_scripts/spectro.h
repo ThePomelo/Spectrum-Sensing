@@ -19,18 +19,18 @@ using namespace std;
 
 class Spectro {
  protected:
-  vector<complex<double> > iq_samples_;
+  vector<complex<float> > iq_samples_;
   double carrier_freq_;
   double sampling_freq_;
   unsigned int fft_size_;
   //double overlap_;
-  vector<double> window_;
+  vector<float> window_;
   //unsigned int average_ffts_;
-  fftw_complex *in_;
-  fftw_complex *out_;
-  fftw_plan plan_;
+  fftwf_complex *in_;
+  fftwf_complex *out_;
+  fftwf_plan plan_;
   //vector<complex<double> > mags_;
-  vector<double> fft_data_;
+  vector<float> fft_data_;
   Gnuplot gp;
 public:
 // beginning of each FFT
@@ -42,13 +42,13 @@ public:
 
   void fft_plot();
 
-  vector<double>* get_fft_data() {
+  vector<float>* get_fft_data() {
     return &fft_data_;
   }
 
   Spectro();
-  Spectro(vector<complex<double> > iq_samples, double carrier_freq,
-         double sampling_freq, unsigned int fft_size,vector<double> window);
+  Spectro(vector<complex<float> > iq_samples, double carrier_freq,
+         double sampling_freq, unsigned int fft_size,vector<float> window);
 
   ~Spectro();
 
@@ -57,3 +57,4 @@ public:
 };
 
 #endif
+
