@@ -49,10 +49,13 @@ std::string RealTimePlotting::Get(std::string param_name) {
 }
 
 void RealTimePlotting::Proc(std::vector<std::complex<float> > *recv_buffer) {
-    std::cout<<"Proc!\n";
+    carrier_freq_ = boost::lexical_cast<double>(radio_parameter_map_->at("uhd_rx_freq"));
+    sampling_freq_ = boost::lexical_cast<double>(radio_parameter_map_->at("uhd_rx_rate"));
+ 
     if (all_set_) {
         auto I = recv_buffer->begin();
-        std::cout<<"Sample buffer\n";
+        //std::cout<<"Sample buffer\n";
+	
     while (iq_samples_.size() < fft_size_ and I != recv_buffer->end()) {
             iq_samples_.push_back(*I);
             ++I;
