@@ -75,7 +75,7 @@ function [fft_data] = spectro(filename,carrier_freq,samp_freq,fft_size,overlap,w
 
     
     fprintf('Calculating Power ... ');
-    power = 20*log10(magnitudes/1000.0);
+    power = 20*log(magnitudes/1000.0);
     fprintf('Done.\n');
     
     

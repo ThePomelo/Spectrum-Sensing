@@ -100,6 +100,8 @@ Spectro::~Spectro() {
 
         fftwf_free(out_);
 
+	gp << "set terminal x11 reset\n";
+	gp << "exit\n";
 }
 
 
@@ -176,7 +178,7 @@ s.resize(fft_size_,0);
 
 
 
-        std::cout<<"fft_generate\n";
+        //std::cout<<"fft_generate\n";
 
 
 
@@ -200,7 +202,7 @@ for (unsigned int i = 0; i < fft_size_; ++i) {
 
 }
 
-std::cout<<"Windowing\n";
+//std::cout<<"Windowing\n";
 
 fftwf_execute(plan_);
 
@@ -222,7 +224,7 @@ for (unsigned int i = fft_half; i < fft_size_; ++i) {
 
 }
 
-std::cout<<"fftshift1\n";
+//std::cout<<"fftshift1\n";
 
 
 
@@ -232,7 +234,7 @@ for (unsigned int i = 0; i < fft_half; ++i) {
 
 }
 
-std::cout<<"fftshift2\n";
+//std::cout<<"fftshift2\n";
 
 
 
@@ -248,7 +250,7 @@ iq_samples_.clear();
 
 void Spectro::fft_plot() {
 
-        std::cout<<"fft_plot\n";
+        //std::cout<<"fft_plot\n";
 
         vector<pair<float,float> > xy_pts_A;
 
@@ -260,7 +262,7 @@ void Spectro::fft_plot() {
 
         }
 
-        std::cout<<"Magnitudes\n";
+        //std::cout<<"Magnitudes\n";
 
 
 
@@ -271,6 +273,7 @@ void Spectro::fft_plot() {
         gp.flush();
 
 }
+
 
 
 
